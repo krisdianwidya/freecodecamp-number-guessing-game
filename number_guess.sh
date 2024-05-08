@@ -4,7 +4,7 @@ PSQL="psql --username=freecodecamp --dbname=number_guess -t -c"
 GAME_FUNCTION(){
   # generate actual number
   ACTUAL_NUM=$(( RANDOM % 1000 + 1 ))
-
+  echo actual num $ACTUAL_NUM
   # get guess number from input
   if [[ $1 ]]
   then
@@ -14,10 +14,24 @@ GAME_FUNCTION(){
   fi
   read GUESS_NUM
   
-  # check between number
+  # check if input is not number
   if [[ ! $GUESS_NUM =~ ^[0-9]+$ ]]
   then
     GAME_FUNCTION "That is not an integer, guess again:"
+  else
+    # the input is number, check if the numbers is same
+    if [[ $ACTUAL_NUM = $GUESS_NUM ]]
+    then
+      echo ok
+    else
+      # check if lower or higher
+      if [[ $ACTUAL_NUM > $GUESS_NUM ]]
+      then
+        GAME_FUNCTION "It's lower than that, guess again:"
+      else
+        GAME_FUNCTION "It's higher than that, guess again:"
+      fi
+    fi
   fi
 }
 
