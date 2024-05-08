@@ -5,6 +5,8 @@ GAME_FUNCTION(){
   # generate actual number
   ACTUAL_NUM=$(( RANDOM % 1000 + 1 ))
   echo actual num $ACTUAL_NUM
+  PLAYER_ID=$(echo $USERNAME_DB | grep -o '^.')
+  
   # get guess number from input
   if [[ $1 ]]
   then
@@ -24,6 +26,9 @@ GAME_FUNCTION(){
     then
       echo ok
     else
+      # add games_played
+      UPDATE_GAMES_PLAYED=$($PSQL "UPDATE players SET games_played = games_played + 1 WHERE player_id = $PLAYER_ID")
+      
       # check if lower or higher
       if [[ $ACTUAL_NUM > $GUESS_NUM ]]
       then
